@@ -148,6 +148,9 @@ class DiscordBot(commands.Bot):
                 f"Executed {executed_command} command by {context.author} (ID: {context.author.id}) in DMs"
             )
     
+    async def on_message(self, message):
+        print(message)
+
     async def on_command_error(self, context: Context, error) -> None:
         if isinstance(error, commands.CommandOnCooldown):
             minutes, seconds = divmod(error.retry_after, 60)
@@ -158,3 +161,47 @@ class DiscordBot(commands.Bot):
                 color=0xE02B2B,
             )
             await context.send(embed=embed)
+        elif isinstance(error, commands.NotOwner):
+            embed = discord.Embed(
+                description="You are not the owner of the bot!", color=0xE02B2B
+            )
+            await context.send(embed=embed)
+            if context.guild:
+                self.logger.warning(
+                    f"{context.author} (ID: {context.author.id}) tried to execute an owner only command in the guild {context.guild.name} (ID: {context.guild.id}), but the user is not an owner of the bot."
+                )
+            else:
+                self.logger.warning(
+                    f"{context.author} (ID: {context.author.id}) tried to execute an owner only command in the bot's DMs, but the user is not an owner of the bot."
+                )
+        elif isinstance(error, commands.MissingPermissions):
+            embed = discord.Embed(
+                description="You are missing the permission(s) `"
+                + ", ".join(error.missing_permissions)
+                + "` to execute this command!",
+                color=0xE02B2B,
+            )
+            await context.send(embed=embed)
+        elif isinstance(error, commands.BotMissingPermissions):
+            embed = discord.Embed(
+                description="I am missing the permission(s) `"
+                + ", ".join(error.missing_permissions)
+                + "` to fully perform this command!",
+                color=0xE02B2B,
+            )
+            await context.send(embed=embed)
+        elif isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(
+                title="Error!",
+                # We need to capitalize because the command arguments have no capital letter in the code and they are the first word in the error message.
+                description=str(error).capitalize(),
+                color=0xE02B2B,
+            )
+            await context.send(embed=embed)
+        else:
+            raise error
+        
+load_dotenv()
+
+bot = DiscordBot()
+bot.run(os.getenv("TOKEN"))
