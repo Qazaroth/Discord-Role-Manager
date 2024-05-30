@@ -163,13 +163,13 @@ class DiscordBot(commands.Bot):
                         f"Failed to load extension {extension}\n{exception}"
                     )
     
-    @tasks.loop(minutes=.25)
+    @tasks.loop(minutes=1.0)
     async def status_task(self) -> None:
         statuses = ["with the NCR."]
         thisGuild = self.get_guild(1213830412334534666)
 
         start = datetime.now().timestamp()
-        print("Checking roles and nicknames...")
+        # print("Checking roles and nicknames...")
         if thisGuild is not None:
             members = thisGuild.members
 
@@ -203,7 +203,7 @@ class DiscordBot(commands.Bot):
         end = datetime.now().timestamp()
         timeDiff = start-end
 
-        print("Check done. Time taken: {}s".format(timeDiff))
+        # print("Check done. Time taken: {}s".format(timeDiff))
 
         await self.change_presence(activity=discord.Game(random.choice(statuses)))
 

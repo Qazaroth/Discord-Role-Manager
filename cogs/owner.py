@@ -17,3 +17,25 @@ class Owner(commands.Cog, name="owner"):
     async def sync(self, context: Context, scope: str) -> None:
         if scope == "global":
             await context.bot.tree.sync()
+            embed = discord.Embed(
+                description="Slash commands have been globally synchronized.",
+                color=0xBEBEFE,
+            )
+            await context.send(embed=embed)
+            return
+        elif scope == "guild":
+            context.bot.tree.copy_global_to(guild=context.guild)
+            await context.bot.tree.sync(guild=context.guild)
+
+            embed = discord.Embed(
+                description="Slash commands have been synchronized in this guild.",
+                color=0xBEBEFE,
+            )
+
+            await context.send(embed=embed)
+            return
+        
+        embed = discord.Embed(
+            description="The scope must be `global` or `guild`.", color=0xE02B2B
+        )
+        await context.send(embed=embed)
