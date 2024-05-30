@@ -154,5 +154,5 @@ class General(commands.Cog, name="general"):
         )
         await context.send(embed=embed)
 
-    async def setup(bot) -> None:
-        await bot.add_cog(General(bot))
+async def setup(bot) -> None:
+    await bot.add_cog(General(bot))

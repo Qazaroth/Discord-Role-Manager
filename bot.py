@@ -71,59 +71,59 @@ def getRank(rank:str) -> str:
 
     match rank:
         case "cadet":
-            return "(REC)"
+            return "[REC]"
         case "private":
-            return "(PTE)"
+            return "[PTE]"
         case "private first class":
-            return "(PFC)"
+            return "[PFC]"
         case "specialist":
-            return "(SPC)"
+            return "[SPC]"
         case "corporal":
-            return "(CPL)"
+            return "[CPL]"
         case "sergeant":
-            return "(SGT)"
+            return "[SGT]"
         case "staff sergeant":
-            return "(SSG)"
+            return "[SSG]"
         case "sergeant first class":
-            return "(SFC)"
+            return "[SFC]"
         case "master sergeant":
-            return "(MSG)"
+            return "[MSG]"
         case "first sergeant":
-            return "(1SG)"
+            return "[1SG]"
         case "sergeant major":
-            return "(SGM)"
+            return "[SGM]"
         case "command sergeant major":
-            return "(CSM)"
+            return "[CSM]"
         case "warrant officer 1":
-            return "(WO1)"
+            return "[WO1]"
         case "chief warrant officer 2":
-            return "(CW2)"
+            return "[CW2]"
         case "chief warrant officer 3":
-            return "(CW3)"
+            return "[CW3]"
         case "chief warrant officer 4":
-            return "(CW4)"
+            return "[CW4]"
         case "chief warrant officer 5":
-            return "(CW5)"
+            return "[CW5]"
         case "second lieutenant":
-            return "(2LT)"
+            return "[2LT]"
         case "first lieutenant":
-            return "(1LT)"
+            return "[1LT]"
         case "captain":
-            return "(CPT)"
+            return "[CPT]"
         case "major":
-            return "(MAJ)"
+            return "[MAJ]"
         case "lieutenant colonel":
-            return "(LTC)"
+            return "[LTC]"
         case "colonel":
-            return "(COL)"
+            return "[COL]"
         case "brigadier general":
-            return "(Brig. Gen)"
+            return "[Brig. Gen]"
         case "major general":
-            return "(Maj. Gen)"
+            return "[Maj. Gen]"
         case "lieutenant general":
-            return "(Lt. Gen)"
+            return "[Lt. Gen]"
         case "general":
-            return "(Gen)"
+            return "[Gen]"
 
     return ""
 
@@ -163,7 +163,7 @@ class DiscordBot(commands.Bot):
                         f"Failed to load extension {extension}\n{exception}"
                     )
     
-    @tasks.loop(minutes=0.25)
+    @tasks.loop(minutes=.25)
     async def status_task(self) -> None:
         statuses = ["with the NCR."]
         thisGuild = self.get_guild(1213830412334534666)
@@ -176,7 +176,22 @@ class DiscordBot(commands.Bot):
                 memberRoles = m.roles
                 highestRole = memberRoles[-1]
                 rank = getRank(highestRole.name)
-                if not m.guild_permissions.administrator and not m._user.bot and highestRole.name not in ["My Daughter(s)"]:
+                nicknameExempt = False
+
+                if m.guild_permissions.administrator:
+                    nicknameExempt = True
+                
+                if m._user.bot:
+                    nicknameExempt = True
+
+                for role in memberRoles:
+                    if role.name.lower() == "ss nickname exempt":
+                        nicknameExempt = True
+
+                if highestRole.name in ["My Daughter(s)"]:
+                    nicknameExempt = True
+
+                if not nicknameExempt:
                     print("{} {} [{}]".format(rank, m._user.display_name, highestRole))
 
                     oldNickname = m.display_name

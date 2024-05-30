@@ -12,5 +12,5 @@ class Template(commands.Cog, name="template"):
     async def testcommand(self, context: Context) -> None:
         pass
 
-    async def setup(bot) -> None:
-        await bot.add_cog(Template(bot))
+async def setup(bot) -> None:
+    await bot.add_cog(Template(bot))
