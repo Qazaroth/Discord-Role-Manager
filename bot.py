@@ -8,7 +8,7 @@ import sys
 import aiosqlite
 import discord
 
-import discord
+from datetime import datetime
 from discord.ext import commands, tasks
 from discord.ext.commands import Context
 from dotenv import load_dotenv
@@ -168,6 +168,7 @@ class DiscordBot(commands.Bot):
         statuses = ["with the NCR."]
         thisGuild = self.get_guild(1213830412334534666)
 
+        start = datetime.now().timestamp()
         print("Checking roles and nicknames...")
         if thisGuild is not None:
             members = thisGuild.members
@@ -192,14 +193,17 @@ class DiscordBot(commands.Bot):
                     nicknameExempt = True
 
                 if not nicknameExempt:
-                    print("{} {} [{}]".format(rank, m._user.display_name, highestRole))
+                    # print("{} {} [{}]".format(rank, m._user.display_name, highestRole))
 
                     oldNickname = m.display_name
                     newNickname = "{} {}".format(rank, m._user.display_name)
 
                     if oldNickname != newNickname:
                         await m.edit(nick=newNickname)
-        print("Check done.")
+        end = datetime.now().timestamp()
+        timeDiff = start-end
+
+        print("Check done. Time taken: {}s".format(timeDiff))
 
         await self.change_presence(activity=discord.Game(random.choice(statuses)))
 
