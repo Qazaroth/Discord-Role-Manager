@@ -1,8 +1,8 @@
-[2024-05-30 15:53:46] [INFO    ] discord_bot: Logged in as Sunny Smiles
-[2024-05-30 15:53:46] [INFO    ] discord_bot: discord.py API version: 2.3.2
-[2024-05-30 15:53:46] [INFO    ] discord_bot: Python version: 3.12.2
-[2024-05-30 15:53:46] [INFO    ] discord_bot: Running on: Windows 11 (nt)
-[2024-05-30 15:53:46] [INFO    ] discord_bot: -------------------
-[2024-05-30 15:53:46] [ERROR   ] discord_bot: Failed to load extension general
+[2024-05-30 16:20:07] [INFO    ] discord_bot: Logged in as Sunny Smiles
+[2024-05-30 16:20:07] [INFO    ] discord_bot: discord.py API version: 2.3.2
+[2024-05-30 16:20:07] [INFO    ] discord_bot: Python version: 3.12.2
+[2024-05-30 16:20:07] [INFO    ] discord_bot: Running on: Windows 11 (nt)
+[2024-05-30 16:20:07] [INFO    ] discord_bot: -------------------
+[2024-05-30 16:20:07] [ERROR   ] discord_bot: Failed to load extension general
 ExtensionFailed: Extension 'cogs.general' raised an error: CommandAlreadyRegistered: Command 'Grab ID' already registered.
-[2024-05-30 15:53:46] [INFO    ] discord_bot: Loaded extension "template"
+[2024-05-30 16:20:07] [INFO    ] discord_bot: Loaded extension "template"

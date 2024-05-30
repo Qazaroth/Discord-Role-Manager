@@ -219,8 +219,10 @@ class DiscordBot(commands.Bot):
             f"Running on: {platform.system()} {platform.release()} ({os.name})"
         )
         self.logger.info("-------------------")
+        
         # await self.init_db()
         await self.load_cogs()
+        
         self.status_task.start()
         #self.database = DatabaseManager(
         #    connection=await aiosqlite.connect(
