@@ -19,7 +19,7 @@ else:
     with open("{}/config.json".format(os.path.realpath(os.path.dirname(__file__)))) as file:
         config = json.load(file)
 
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 
 class LoggingFormatter(logging.Formatter):
     # Colors
@@ -66,6 +66,67 @@ file_handler.setFormatter(file_handler_formatter)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
+def getRank(rank:str) -> str:
+    rank = rank.lower()
+
+    match rank:
+        case "cadet":
+            return "(REC)"
+        case "private":
+            return "(PTE)"
+        case "private first class":
+            return "(PFC)"
+        case "specialist":
+            return "(SPC)"
+        case "corporal":
+            return "(CPL)"
+        case "sergeant":
+            return "(SGT)"
+        case "staff sergeant":
+            return "(SSG)"
+        case "sergeant first class":
+            return "(SFC)"
+        case "master sergeant":
+            return "(MSG)"
+        case "first sergeant":
+            return "(1SG)"
+        case "sergeant major":
+            return "(SGM)"
+        case "command sergeant major":
+            return "(CSM)"
+        case "warrant officer 1":
+            return "(WO1)"
+        case "chief warrant officer 2":
+            return "(CW2)"
+        case "chief warrant officer 3":
+            return "(CW3)"
+        case "chief warrant officer 4":
+            return "(CW4)"
+        case "chief warrant officer 5":
+            return "(CW5)"
+        case "second lieutenant":
+            return "(2LT)"
+        case "first lieutenant":
+            return "(1LT)"
+        case "captain":
+            return "(CPT)"
+        case "major":
+            return "(MAJ)"
+        case "lieutenant colonel":
+            return "(LTC)"
+        case "colonel":
+            return "(COL)"
+        case "brigadier general":
+            return "(Brig. Gen)"
+        case "major general":
+            return "(Maj. Gen)"
+        case "lieutenant general":
+            return "(Lt. Gen)"
+        case "general":
+            return "(Gen)"
+
+    return ""
+
 class DiscordBot(commands.Bot):
     def __init__(self) -> None:
         super().__init__(
@@ -102,9 +163,29 @@ class DiscordBot(commands.Bot):
                         f"Failed to load extension {extension}\n{exception}"
                     )
     
-    @tasks.loop(minutes=1.0)
+    @tasks.loop(minutes=0.25)
     async def status_task(self) -> None:
-        statuses = ["with you!", "with humans!"]
+        statuses = ["with the NCR."]
+        thisGuild = self.get_guild(1213830412334534666)
+
+        print("Checking roles and nicknames...")
+        if thisGuild is not None:
+            members = thisGuild.members
+
+            for m in members:
+                memberRoles = m.roles
+                highestRole = memberRoles[-1]
+                rank = getRank(highestRole.name)
+                if not m.guild_permissions.administrator and not m._user.bot and highestRole.name not in ["My Daughter(s)"]:
+                    print("{} {} [{}]".format(rank, m._user.display_name, highestRole))
+
+                    oldNickname = m.display_name
+                    newNickname = "{} {}".format(rank, m._user.display_name)
+
+                    if oldNickname != newNickname:
+                        await m.edit(nick=newNickname)
+        print("Check done.")
+
         await self.change_presence(activity=discord.Game(random.choice(statuses)))
 
     @status_task.before_loop
@@ -147,9 +228,6 @@ class DiscordBot(commands.Bot):
             self.logger.info(
                 f"Executed {executed_command} command by {context.author} (ID: {context.author.id}) in DMs"
             )
-    
-    async def on_message(self, message):
-        print(message)
 
     async def on_command_error(self, context: Context, error) -> None:
         if isinstance(error, commands.CommandOnCooldown):

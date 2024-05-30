@@ -1,0 +1,9 @@
+[2024-05-30 12:05:18] [INFO    ] discord_bot: Logged in as Sunny Smiles
+[2024-05-30 12:05:18] [INFO    ] discord_bot: discord.py API version: 2.3.2
+[2024-05-30 12:05:18] [INFO    ] discord_bot: Python version: 3.12.2
+[2024-05-30 12:05:18] [INFO    ] discord_bot: Running on: Windows 11 (nt)
+[2024-05-30 12:05:18] [INFO    ] discord_bot: -------------------
+[2024-05-30 12:05:18] [ERROR   ] discord_bot: Failed to load extension general
+NoEntryPointError: Extension 'cogs.general' has no 'setup' function.
+[2024-05-30 12:05:18] [ERROR   ] discord_bot: Failed to load extension template
+NoEntryPointError: Extension 'cogs.template' has no 'setup' function.
